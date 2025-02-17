@@ -59,7 +59,7 @@ int main(){
     
     auto start = chrono::high_resolution_clock::now();
 
-    for(int pot = 10; pot <= 10; pot++){
+    for(int pot = 1; pot <= 9; pot++){
         quantity = pow(10, pot);
         variables.reserve(quantity);
         tiempos << endl << endl << "Potencia " << pot << endl;
@@ -69,10 +69,14 @@ int main(){
 
             for (int times = 1; times <= 10; times++){
                 variables.clear();
+                auto start = chrono::high_resolution_clock::now();
                 for(int l = 0; l < quantity; l++){
                     variables.push_back(dist(gen));
                 }
-                // cout << times << ".\t" << "Potencia " << pot << "\t" << "Pivote " << pivot << "\t" <<  << endl;
+                auto end = chrono::high_resolution_clock::now();
+
+                auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+                cout << times << ".\t" << "Potencia " << pot << "\t" << "Pivote " << pivot << "\t" << duration.count() << endl;
     
                 auto inicio = chrono::high_resolution_clock::now();
     
