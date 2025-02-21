@@ -34,12 +34,14 @@ class Vector{
         }
     
     private: // METODOS PRIVADOS
-        void resize(){
-            capacity_ *= 1.5; // Aumentamos la nueva capacidad del vector
+        void resize(const int start){
+            if(size_ == capacity_){
+                capacity_ *= 1.5; // Aumentamos la nueva capacidad del vector
+            }
             int *storage_2 = new Type[capacity_]; // Creamos un arreglo con la nueva capacidad
 
             for(unsigned int i = 0; i < size_; i++){
-                storage_2[i] = storage_[i]; // Copiamos los datos del arreglo de menor al de mayor capacidad
+                storage_2[i + start] = storage_[i]; // Copiamos los datos del arreglo de menor al de mayor capacidad
             }
 
             delete [] storage_; // Liberamos la memoria que ocupaba el vector anterior
@@ -47,18 +49,6 @@ class Vector{
         }
 
     public: // METODOS PUBLICOS
-        void push_back(const Type *elem){
-            if(size_ == capacity_){
-                resize();
-            }
-            storage_[size_] = *elem; // Ingresa un elemento al vector, por la cola
-            size_ ++; // Aumenta la cantidad de elementos en el vector
-        }
-        
-        unsigned int size() const {
-            return size_;
-        }
-        
         const Type& operator[](unsigned int pos) const { // El const despues de los () sirve para decir que la operacion no cambiara ninguno de los atributos de la class
             return storage_[pos];
         }
@@ -68,14 +58,46 @@ class Vector{
             return storage_[pos];
         }
         
+        unsigned int size() const {
+            return size_;
+        }
+        
         void print(){
             for(unsigned int i = 0; i < size(); i++) // Usamos el metodo size() dentro de la misma class
                 cout << storage_[i] << " ";
             cout << endl;
         }
         
+        void push_back(const Type &elem){
+            if(size_ == capacity_){
+                resize();
+            }
+            storage_[size_] = elem; // Ingresa un elemento al vector, por la cola
+            size_ ++; // Aumenta la cantidad de elementos en el vector
+        }
+        
+        void push_front(const Type& elem){
+            if(size_ == capacity_){
+                resize();
+            }
+            for(int i = size_; i > 0; i--){
+                swap(storage_[i], storage_[i - 1]);
+            }
+            storage_[0] = elem;
+            size++;
+        }
+        
         void pop_back(){
             size_--; // Le quitamos uno a la variable que usamos como indice porque queremos dejar de usar el ultimo elemento como parte del vector
+        }
+        
+        void pop_front(){
+            storage_ += 1;
+            size--;
+        }
+        
+        void waste() const {
+            return capacity_ - size;
         }
 };
 
