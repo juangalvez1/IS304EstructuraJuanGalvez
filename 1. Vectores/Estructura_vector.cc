@@ -34,14 +34,18 @@ class Vector{
         }
     
     private: // METODOS PRIVADOS
-        void resize(const int start){
+        void resize(){
             if(size_ == capacity_){
-                capacity_ *= 1.5; // Aumentamos la nueva capacidad del vector
+                // capacity_ += 1;     // Aumentamos la nueva capacidad del vector: politica de Brahian
+                // capacity_ += 2;     // Aumentamos la nueva capacidad del vector: politica de 
+                capacity_ *= 1.5;   // Aumentamos la nueva capacidad del vector: politica de Carlos
+                // capacity_ *= 1.7;   // Aumentamos la nueva capacidad del vector: politica de 
+                // capacity_ *= 2;     // Aumentamos la nueva capacidad del vector: politica de Martin
             }
-            int *storage_2 = new Type[capacity_]; // Creamos un arreglo con la nueva capacidad
+            Type *storage_2 = new Type[capacity_]; // Creamos un arreglo con la nueva capacidad
 
             for(unsigned int i = 0; i < size_; i++){
-                storage_2[i + start] = storage_[i]; // Copiamos los datos del arreglo de menor al de mayor capacidad
+                storage_2[i] = storage_[i]; // Copiamos los datos del arreglo de menor al de mayor capacidad
             }
 
             delete [] storage_; // Liberamos la memoria que ocupaba el vector anterior
@@ -76,28 +80,30 @@ class Vector{
             size_ ++; // Aumenta la cantidad de elementos en el vector
         }
         
-        void push_front(const Type& elem){
-            if(size_ == capacity_){
-                resize();
-            }
-            for(int i = size_; i > 0; i--){
-                swap(storage_[i], storage_[i - 1]);
-            }
-            storage_[0] = elem;
-            size++;
-        }
-        
         void pop_back(){
             size_--; // Le quitamos uno a la variable que usamos como indice porque queremos dejar de usar el ultimo elemento como parte del vector
         }
-        
-        void pop_front(){
-            storage_ += 1;
-            size--;
+
+        void push_front(const Type& elem){
+            if(size_ == capacity_){
+                resize(); // Si necesiamos mas espacio para guardar todos los elementos del vector aumentamos el tamaño del arreglo
+            }
+            for(int i = size_; i > 0; --i){
+                storage_[i] = storage_[i - 1]; // Movemos todos los elementos del vector uno a la der
+            }
+            storage_[0] = elem; // Insertamos el elemento deseado al principio
+            size_++; // Aumentamos la cantidad de datos del vector
         }
         
-        void waste() const {
-            return capacity_ - size;
+        void pop_front(){
+            for(int i = 0; i < size_ - 1; ++i){
+                storage_[i] = storage_[i + 1]; // Movemos todos los elementos del vector uno hacia atras
+            }
+            size_--;
+        }
+        
+        int waste() const {
+            return capacity_ - size_;
         }
 };
 
@@ -107,7 +113,7 @@ class Complex{
         double img;
     public:
         Complex(){
-            cout << "complex default constructor 1234567890" << endl;
+            // cout << "complex default constructor 1234567890" << endl;
             real = 5.;
             img = 10.;
         }
@@ -120,17 +126,20 @@ class Complex{
 
 int main(){
     cout << "Vector" << endl;
-    Vector<unsigned char> x(10, 55);
+    Vector<int> x(10, 55);
     Vector<Complex> z(5);
     
     x.print();
-    // z.print();  // Si se descomenta saldra un error, ya que no se puede imprimir directamente una clase como Complex con cout.
-                // Para eso se usa la funcion de tipo friend en public de Complex.
+    // z.print();   // Si se descomenta saldra un error, ya que no se puede imprimir directamente una clase como Complex con cout.
+                    // Para eso se usa la funcion de tipo friend en public de Complex.
     // Complex a;
     // cout << a << endl; // Sigue funcionando para variables de tipo Complex pero no solo para un vector de ese tipo.
     
-    x.at(8) = 50;
+    x.push_front(50);
     x.print();
+    x.pop_front();
+    x.print();
+    cout << x.waste() << endl;
 
     return 0;
 }
