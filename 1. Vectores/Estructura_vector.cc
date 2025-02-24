@@ -5,7 +5,7 @@ using namespace std;
 
 template <typename Type>   // Se incluye para manejar a Type como el tipo de dato que va a usar el vector en sus elementos
                         // Y poder hacer que los vectores manejen cualquier tipo de dato
-class Vector{
+class Vector {
     private: // ATRIBUTOS
         Type *storage_;
         // Puntero al arreglo que manejaremos como vector
@@ -104,6 +104,10 @@ class Vector{
         
         int waste() const {
             return capacity_ - size_;
+        }
+
+        bool empty(){
+            return !size_;
         }
 };
 
