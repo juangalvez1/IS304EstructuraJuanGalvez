@@ -7,19 +7,20 @@
 
 using namespace std;
 
-void Merge(vector<unsigned char> *list, int left, int rigth, int middle) {
+template <typename Type>
+void Merge(vector<Type> *Vector, int left, int rigth, int middle) {
     int tamLeftVector = middle - left + 1;
     int tamRigthVector = rigth - middle;
 
-    vector<unsigned char> leftVector(tamLeftVector);
-    vector<unsigned char> rigthVector(tamRigthVector);
+    vector<Type> leftVector(tamLeftVector);
+    vector<Type> rigthVector(tamRigthVector);
 
     for(int i = 0; i < tamLeftVector; i++) {
-        leftVector[i] = list->at(left + i);
+        leftVector[i] = Vector->at(left + i);
     }
 
     for(int j = 0; j < tamRigthVector; j++) {
-        rigthVector[j] = list->at(middle + j + 1);
+        rigthVector[j] = Vector->at(middle + j + 1);
     }
 
     int l = 0, r = 0;
@@ -27,33 +28,33 @@ void Merge(vector<unsigned char> *list, int left, int rigth, int middle) {
 
     while (l < tamLeftVector && r < tamRigthVector) {
         if (leftVector[l] <= rigthVector[r]) {
-            list->at(pos) = leftVector[l];
+            Vector->at(pos) = leftVector[l];
             l++;
         } else {
-            list->at(pos) = rigthVector[r];
+            Vector->at(pos) = rigthVector[r];
             r++;
         }
         pos++;
     }
 
     while (l < tamLeftVector) {
-        list->at(pos) = leftVector[l];
+        Vector->at(pos) = leftVector[l];
         l++;
         pos++;
     }
 
     while (r < tamRigthVector) {
-        list->at(pos) = rigthVector[r];
+        Vector->at(pos) = rigthVector[r];
         r++;
         pos++;
     }
 
-    vector<unsigned char>().swap(leftVector);
-    vector<unsigned char>().swap(rigthVector);
+    vector<Type>().swap(leftVector);
+    vector<Type>().swap(rigthVector);
 }
 
-
-void MergeSort(vector<unsigned char> *vector, int left, int rigth){
+template <typename Type>
+void MergeSort(vector<Type> *vector, int left, int rigth){
     if (left < rigth) {
         int middle = left + ((rigth - left) / 2);
 
@@ -71,7 +72,7 @@ int main(){
     uniform_int_distribution<int> dist(1, 100);
    
     int quantity = 0;
-    vector<unsigned char> variables;    
+    vector<unsigned int> variables;    
 
     ofstream tiempos("tiemposMerge.dat", ios::app);
     if (!tiempos){
