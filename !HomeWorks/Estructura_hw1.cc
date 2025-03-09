@@ -152,20 +152,38 @@ class Vector {
         }
 };
 
-class Complex{
+template <typename Type>
+class Stack{
     private:
-        double real;
-        double img;
+        unsigned int top;
+        Vector<Type> storage_; 
+
     public:
-        Complex(){
-            // cout << "complex default constructor 1234567890" << endl;
-            real = 5.;
-            img = 10.;
+        Stack(const Type elem = Type()){
+            top = 0;
+            storage_.push_back(elem); 
+        }
+
+        void push(const Type elem){
+            top++;
+            storage_.push_back(elem);
+
+        }
+
+        Type pop(){
+            assert(top > 0);
+            Type elem = storage_[top];
+            storage_.pop_back();
+            top--;
+            return elem; 
         }
         
-        friend ostream& operator<<(ostream& os, const Complex& c) { // Funcion amiga que ayduda a imprimir un tipo de dato complejo directamente en un cout
-            os << "(" << c.real << ", " << c.img << "i)";
-            return os;
+         Type peek(){
+          return storage_.at(top);
+        }
+        
+        bool empty(){
+          return storage_ == 0;
         }
 };
 
@@ -285,14 +303,12 @@ Vector<Type> mergeSortedVectors(Vector<Type>& vector1, Vector<Type>& vector2){
 
 int main(){
     // cout << "Vector" << endl;
-    // Vector<int> x;
-    
+    // Vector<int> x;  
     // x.print();
     // // z.print();   // Si se descomenta saldra un error, ya que no se puede imprimir directamente una clase como Complex con cout.
     //                 // Para eso se usa la funcion de tipo friend en public de Complex.
     // // Complex a;
     // // cout << a << endl; // Sigue funcionando para variables de tipo Complex pero no solo para un Vector de ese tipo.
-    
     // for(int i = 0; i < 10; i++){
     //     x.push_back(i * 10);
     // }
@@ -370,6 +386,17 @@ int main(){
     Vector<int> mergedVector5 = mergeSortedVectors(vector9, vector10);
     mergedVector5.print(); // Expected: {1, 1, 2, 2, 2, 3, 4, 4, 5, 6, 9, 10, 20}
     */
+
+    Stack<int> pila;
+
+    cout << pila.peek() << endl;
+    pila.push(20);
+    cout << pila.peek() << endl;
+    pila.pop();
+    cout << pila.peek() << endl;
+    pila.push(30);
+    cout << pila.peek() << endl;
+    cout << pila.peek() << endl;
 
     return 0;
 }
