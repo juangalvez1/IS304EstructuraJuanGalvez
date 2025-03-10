@@ -93,7 +93,7 @@ class Vector {
                 resize();
             }
             storage_[size_] = elem; // Ingresa un elemento al Vector, por la cola
-            size_ ++; // Aumenta la cantidad de elementos en el Vector
+            size_++; // Aumenta la cantidad de elementos en el Vector
         }
         
         void pop_back(){
@@ -121,7 +121,7 @@ class Vector {
         }
 
         void insert(const Type& elem, const unsigned int pos){
-            assert(pos < size_);
+            assert(pos <= size_);
             if(size_ == capacity_){
                 resize();
             }
@@ -135,7 +135,6 @@ class Vector {
         }
         
         void erase(const unsigned int pos){
-            cout << pos << endl;
             assert(pos < size_);
             for (unsigned int i = pos; i < size_; i++) {
                 storage_[i] = storage_[i + 1];
@@ -155,35 +154,42 @@ class Vector {
 template <typename Type>
 class Stack{
     private:
-        unsigned int top;
+        int top_;
         Vector<Type> storage_; 
 
     public:
         Stack(const Type elem = Type()){
-            top = 0;
+            top_ = 0;
             storage_.push_back(elem); 
         }
 
         void push(const Type elem){
-            top++;
+            top_++;
             storage_.push_back(elem);
 
         }
 
         Type pop(){
-            assert(top > 0);
-            Type elem = storage_[top];
+            assert(!empty());
+            Type elem = storage_[top_];
             storage_.pop_back();
-            top--;
+            top_--;
             return elem; 
         }
         
-         Type peek(){
-          return storage_.at(top);
+        Type peek(){
+          return storage_.at(top_);
         }
         
         bool empty(){
-          return storage_ == 0;
+            return top_ == -1;
+        }
+
+        void print(){
+            cout << endl;
+            for(int i = top_; i >= 0; i--)
+                cout << storage_[i] << endl;
+            cout << endl;
         }
 };
 
@@ -340,6 +346,28 @@ int main(){
     emptyVector.pop_back(); // should crash!
     */
 
+    /*prueba de insert and erase
+    Vector<int> myVector;
+
+    for (int i = 0; i < 10; i++){
+        myVector.push_back(i * 10);
+    }
+
+    myVector.print();
+
+    myVector.insert(55, 6);
+    myVector.print();
+    
+    myVector.insert(1, 0);
+    myVector.print();
+
+    myVector.insert(100, 12);
+    myVector.print();
+
+    myVector.erase(8);
+    myVector.print();
+    */
+
     /* prueba de removeDuplicates
     Vector<int> numbers = {1, 2, 2, 3, 4, 4, 5};
     Vector<int> uniqueNumbers = removeDuplicates(numbers);
@@ -387,16 +415,24 @@ int main(){
     mergedVector5.print(); // Expected: {1, 1, 2, 2, 2, 3, 4, 4, 5, 6, 9, 10, 20}
     */
 
-    Stack<int> pila;
+    /*prueba de implementacion de Stack
+    Stack<int> pila(10);
 
-    cout << pila.peek() << endl;
+    pila.print();
+    pila.pop();
+    cout << pila.empty() << endl;
     pila.push(20);
+    pila.push(30);
+    pila.print();
+    cout << pila.peek() << endl;
+    pila.push(40);
     cout << pila.peek() << endl;
     pila.pop();
+    pila.print();
+    pila.push(50);
     cout << pila.peek() << endl;
-    pila.push(30);
-    cout << pila.peek() << endl;
-    cout << pila.peek() << endl;
+    pila.print();
+    */
 
     return 0;
 }
