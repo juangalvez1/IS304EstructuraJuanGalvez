@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cassert>
+#include <random>
+#include <fstream>
 
 using namespace std;
 
@@ -13,6 +15,7 @@ class Vector {
         // Capacidad total actual del Vector
         unsigned int size_;
         // Tamaño actual del Vector
+        unsigned int resizes_;
     
     public: // CONSTRUCTORES
         Vector(){
@@ -20,6 +23,7 @@ class Vector {
             storage_ = new Type[capacity_];
             // new: reserva una posicion de memoria y devuelve su direccion
             size_ = 0; // cantidad de datos iniciales del Vector
+            resizes_ = 0;
         }
         
 		Vector(unsigned int tam, Type elem = Type()){
@@ -31,6 +35,7 @@ class Vector {
 				storage_[i] = elem;
 			}
             size_ = capacity_; // cantidad de datos iniciales del Vector
+            resizes_ = 0;
         }
 
         Vector(initializer_list<Type> list){
@@ -42,6 +47,7 @@ class Vector {
                 storage_[i] = elem;  // Copiamos cada elemento al array
                 i++;
             }
+            resizes_ = 0;
         }
     
     private: // METODOS PRIVADOS
@@ -52,6 +58,7 @@ class Vector {
                 capacity_ *= 1.5;   // Aumentamos la nueva capacidad del Vector: politica de Carlos
                 // capacity_ *= 1.7;   // Aumentamos la nueva capacidad del Vector: politica de 
                 // capacity_ *= 2;     // Aumentamos la nueva capacidad del Vector: politica de Martin
+                resizes_++;
             }
             Type *storage_2 = new Type[capacity_]; // Creamos un arreglo con la nueva capacidad
 
@@ -80,6 +87,10 @@ class Vector {
 
         unsigned int capacity() const {
             return capacity_;
+        }
+
+        unsigned int resizes() const {
+            return resizes_;
         }
         
         void print(){
@@ -178,7 +189,8 @@ class Stack{
         }
         
         Type peek(){
-          return storage_.at(top_);
+            assert(!empty());
+            return storage_[top_];
         }
         
         bool empty(){
@@ -432,6 +444,24 @@ int main(){
     pila.push(50);
     cout << pila.peek() << endl;
     pila.print();
+    */
+
+    /* pruebas de arrays dinamicos
+    random_device rd; 
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(1, 10000);
+
+    ofstream data("capacity_resize_x1_5.dat", ios::app);
+    Vector<int> vector;
+
+    data << "Capacities\t" << "Resizes" << endl;
+    for (int i = 0; i < 1000000; i++) {
+        if(i % 1000 == 0){
+            data << vector.capacity() << "\t\t" << vector.resizes() << endl;
+            cout << vector.capacity() << "\t\t" << vector.resizes() << endl; 
+        }
+        vector.push_back(dist(gen));
+    }
     */
 
     return 0;
