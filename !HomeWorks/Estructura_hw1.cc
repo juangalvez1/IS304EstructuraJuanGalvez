@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <chrono>
 #include <random>
 #include <fstream>
 
@@ -378,6 +379,66 @@ int main(){
 
     myVector.erase(8);
     myVector.print();
+    */
+
+    /*pruebas de tiempo de insert y erase
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(1, 10000);
+    
+    ofstream dataInsert("data_insert.dat");
+
+    if(!dataInsert){
+        cerr << "erorr" << endl;
+    }
+
+    for(int j = 1; j <= 10; j++){
+        Vector<int> prueba;
+
+        for(int i = 0; i < 5000; i++){
+            // cout << "pos" << i << endl;
+            prueba.push_back(dist(gen));
+        }
+        dataInsert << endl;
+
+        for(int i = 0; i < 10000; i+=2){
+            // cout << i << endl;
+            auto inicio = chrono::high_resolution_clock::now();
+
+            prueba.insert(dist(gen), i);
+
+            auto fin = chrono::high_resolution_clock::now();
+            auto duracion = chrono::duration_cast<chrono::nanoseconds>(fin - inicio);
+
+            dataInsert << duracion.count() << ";" << i << endl;
+        }
+    }
+
+    ofstream dataErase("data_erase.dat");
+
+    for(int i = 0; i < 10; i++){
+        Vector<int> prueba;
+
+        for(int j = 0; j < 10000; j++){
+            prueba.push_back(dist(gen));
+        }
+        dataErase<< endl;
+
+        cout << prueba.size() << endl;
+
+        for(int j = 4998; j >= 0; j -= 2){
+            cout << j << endl;
+            auto start = chrono::high_resolution_clock::now();
+            
+            prueba.erase(j);
+            
+            auto end = chrono::high_resolution_clock::now();
+
+            auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            
+            dataErase << duration.count() << ";" << j << endl;
+        }
+    }
     */
 
     /* prueba de removeDuplicates
