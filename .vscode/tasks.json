@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar y Ejecutar",
+            "type": "shell",
+            "command": "mkdir -p \"${fileDirname}/output\" && [[ \"${fileExtname}\" == \".c\" ]] && clang -std=c17 -o \"${fileDirname}/output/${fileBasenameNoExtension}\" \"${file}\" || clang++ -std=c++20 -o \"${fileDirname}/output/${fileBasenameNoExtension}\" \"${file}\" && cd \"${fileDirname}\" && \"./output/${fileBasenameNoExtension}\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

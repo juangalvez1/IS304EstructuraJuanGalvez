@@ -1,0 +1,30 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "algorithm": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "random": "c",
+        "stdlib.h": "c",
+        "functional": "c",
+        "stdio.h": "c",
+        "math.h": "c",
+        "string.h": "c",
+        "limits": "c",
+        "*.tcc": "c"
+    },
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.path": "/usr/bin/clangd",
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.cStandard": "c17",
+
+    
+    "explorer.autoRefresh": true,
+    "files.autoSaveDelay": 500,
+    "files.watcherExclude": {},
+    "files.autoSave": "afterDelay",
+    "explorer.autoReveal": true
+
+}
