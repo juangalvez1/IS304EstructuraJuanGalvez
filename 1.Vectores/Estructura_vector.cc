@@ -283,7 +283,7 @@ Vector<Type> mergeSortedVectors(Vector<Type>& vector1, Vector<Type>& vector2){
     return newVector;
 }
 
-int main(){
+// int main(){
     // cout << "Vector" << endl;
     // Vector<int> x;
     
@@ -371,5 +371,6 @@ int main(){
     mergedVector5.print(); // Expected: {1, 1, 2, 2, 2, 3, 4, 4, 5, 6, 9, 10, 20}
     */
 
-    return 0;
-}
+//     return 0;
+// }
+

@@ -97,19 +97,17 @@ class List {
             }
         }
 
-        int find(Type& elem){
-            assert(size_ != 0);
+        int find(const Type& elem) const {
             Node *p = first_;
             unsigned int position = 0;
-            while (p->get_next() != nullptr){
-                if(p->get_data() == elem){
-                    return position;        // En caso de que no se encuentre el elemento
+            while (p) {  // Se recorre hasta nullptr
+                if (p->get_data() == elem) {
+                    return position;
                 }
                 p = p->get_next();
                 position++;
             }
-
-            return -1;
+            return -1;  // No encontrado
         }
 
         Type& at(unsigned int position){
@@ -143,7 +141,7 @@ class List {
             cout << endl;
         }
 };
-
+/*
 int main() {
     cout << "Listas" << endl;
     List<int> lista;
@@ -172,3 +170,4 @@ int main() {
 
     return 0;
 }
+*/
