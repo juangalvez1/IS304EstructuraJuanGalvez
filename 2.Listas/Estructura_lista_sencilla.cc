@@ -79,7 +79,7 @@ class List {
             if(empty()){
                 last_ = newNode;            // Si la lista exta vacia entonces que last_ apunte al nodo recien ingresado
             }
-            newNode->set_next(first_);      // Hacemos que el nuevo nodo apunte al que apunta first ya que ese se volvera el segundo nodo
+            newNode->set_next(first_);      // Hacemos que el nuevo nodo apunte al que apunta one ya que ese se volvera el segundo nodo
             first_ = newNode;               // Ahora first_ apuntara a el nuevo nodo;
             size_++;                        // Aumentamos el size_ de la lista
         }
@@ -88,7 +88,7 @@ class List {
             assert(size_);                  // Si la lista esta vacia entonces sale un error
 
             Node *temp = first_;            // Creamos un puntero temporal que almacena la direccion a la que apunta first_
-            first_ = first_->get_next();    // Ahora el primer elemento de la lista sera el que tenia first en next, para eso es la temporal
+            first_ = first_->get_next();    // Ahora el primer elemento de la lista sera el que tenia one en next, para eso es la temporal
             delete temp;                    // Liberamos la memoria a la que apuntaba first_
             size_--;                        // Disminuimos la cantidad de elementos de la lista
             
@@ -97,7 +97,7 @@ class List {
             }
         }
 
-        int find(const Type& elem) const {
+        int find(Type& elem) const {
             Node *p = first_;
             unsigned int position = 0;
             while (p) {  // Se recorre hasta nullptr
@@ -140,8 +140,27 @@ class List {
             }
             cout << endl;
         }
+
+        void swap(unsigned int one, unsigned int two){
+            assert(one <= two <= size());
+            if(one == two) return;
+
+            Node* tempOne = first_, *tempTwo = first_;
+
+            for(int i = 0; i < one; i++) {
+                tempOne = tempOne->get_next();
+            }
+            for(int j = 0; j < two; j++) {
+                tempTwo = tempTwo->get_next();
+            }
+
+            Type elem1 = tempOne->get_data(), elem2 = tempTwo->get_data();
+
+            tempOne->get_data() = elem2;
+            tempTwo->get_data() = elem1;
+        }
 };
-/*
+
 int main() {
     cout << "Listas" << endl;
     List<int> lista;
@@ -158,6 +177,10 @@ int main() {
 
     lista.print();
     
+    lista.swap(0,2);
+
+    lista.print();
+
     lista.pop_back();
     
     lista.print();
@@ -170,4 +193,3 @@ int main() {
 
     return 0;
 }
-*/

@@ -69,4 +69,6 @@ int main(){
     Stack<int> pila;
 
     cout << pila.peek() << endl;
+
+    return 0;
 }
