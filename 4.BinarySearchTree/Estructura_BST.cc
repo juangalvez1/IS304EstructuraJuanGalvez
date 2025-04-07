@@ -8,49 +8,52 @@ class BST{
     private:
         class Node{
             private:
-                    Node* left;
-                    Node* right;
-                    Type data;
-                public:
-                    Node(const Type elem = Type()){
-                        left = nullptr;
-                        right = nullptr;
-                        data = elem;
-                    }
+                Node* left;
+                Node* right;
+                Type data;
+            public:
+                Node(const Type elem = Type()){
+                    left = nullptr;
+                    right = nullptr;
+                    data = elem;
+                }
 
-                    Node* get_left(){
-                        return left;
-                    }
-                    Node* get_right(){
-                        return right;
-                    }
-                    Type& get_data(){
-                        return data;
-                    }
+                Node* get_left(){
+                    return left;
+                }
 
-                    void change_left(Node* newPtr){
-                        left = newPtr;
-                    }
-                    void change_right(Node* newPtr){
-                        right = newPtr;
-                    }
+                Node* get_right(){
+                    return right;
+                }
 
-                    bool leaf(){
-                        return (right == nullptr) && (left == nullptr);
-                    }
+                Type& get_data(){
+                    return data;
+                }
 
-                    void print(){
-                        cout << "\t" << get_data() << endl;
-                        if(leaf()){
-                            cout << "null" << "\t\t" << "null" << endl;
-                        } else if(left == nullptr){
-                            cout << "null" << "\t\t" << right->get_data() << endl;
-                        } else if(right == nullptr){
-                            cout << left->get_data() << "\t\t" << "null" << endl;
-                        } else {
-                            cout << left->get_data() << "\t\t" << right->get_data() << endl;
-                        }
+                void change_left(Node* newPtr){
+                    left = newPtr;
+                }
+
+                void change_right(Node* newPtr){
+                    right = newPtr;
+                }
+
+                bool leaf(){
+                    return (right == nullptr) && (left == nullptr);
+                }
+                
+                void print(){
+                    cout << "\t" << get_data() << endl;
+                    if(leaf()){
+                        cout << "null" << "\t\t" << "null" << endl;
+                    } else if(left == nullptr){
+                        cout << "null" << "\t\t" << right->get_data() << endl;
+                    } else if(right == nullptr){
+                        cout << left->get_data() << "\t\t" << "null" << endl;
+                    } else {
+                        cout << left->get_data() << "\t\t" << right->get_data() << endl;
                     }
+                }
         };
         // Atributos
         unsigned int size_;
