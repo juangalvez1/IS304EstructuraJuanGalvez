@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <iomanip>
 
 using namespace std;
 
@@ -63,6 +64,26 @@ class BST{
             if(nodo == nullptr) return -1;
 
             return 1 + max(levelAux(nodo->get_left()), levelAux(nodo->get_right()));
+        }
+        
+        void imprimirArbol(Node* raiz, int space = 0, int increment = 7) {
+            // Caso base
+            if (raiz == nullptr) {
+                return;
+            }
+        
+            // Aumentar el space entre niveles
+            space += increment;
+        
+            // Imprimir el subárbol derecho primero (más cerca de la parte superior)
+            imprimirArbol(raiz->get_right(), space);
+        
+            // Imprimir el valor del nodo actual con la cantidad de spaces necesarios
+            cout << endl;
+            cout << setw(space) << raiz->get_data() << endl;
+        
+            // Imprimir el subárbol izquierdo
+            imprimirArbol(raiz->get_left(), space);
         }
 
     public:
@@ -133,6 +154,10 @@ class BST{
         int level(){
             return 1 + levelAux(root_);
         }
+        
+        void print(){
+            imprimirArbol(root_);
+        }
 };
 
 int main(){
@@ -141,12 +166,14 @@ int main(){
     BST<int> arbol;
 
     arbol.push(5);
-    arbol.push(4);
     arbol.push(6);
+    arbol.push(4);
 
     cout << arbol.size() << endl;
-    cout << arbol.find(4) << endl;
-    cout << arbol.find(5) << endl;
-    cout << arbol.find(6) << endl;
+    // cout << arbol.find(4) << endl;
+    // cout << arbol.find(5) << endl;
+    // cout << arbol.find(6) << endl;
+    arbol.print();
     cout << arbol.level() << endl;
+    
 }
