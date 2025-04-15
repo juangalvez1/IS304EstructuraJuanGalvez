@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <iomanip>
 
 using namespace std;
 
@@ -38,11 +39,15 @@ class BST{
                     right = newPtr;
                 }
 
+                void change_data(Type& elem){
+                    data = elem;
+                }
+
                 bool leaf(){
                     return (right == nullptr) && (left == nullptr);
                 }
                 
-                void print(){
+                void printNode(){
                     cout << "\t" << get_data() << endl;
                     if(leaf()){
                         cout << "null" << "\t\t" << "null" << endl;
@@ -55,17 +60,38 @@ class BST{
                     }
                 }
         };
-        // Atributos
-        unsigned int size_;
-        Node *root_;
-
+        
         int levelAux(Node* nodo){
             if(nodo == nullptr) return -1;
 
             return 1 + max(levelAux(nodo->get_left()), levelAux(nodo->get_right()));
         }
 
-    public:
+        void imprimirArbol(Node* raiz, int space = 0, int increment = 7) {
+            // Caso base
+            if (raiz == nullptr) {
+                return;
+            }
+        
+            // Aumentar el space entre niveles
+            space += increment;
+        
+            // Imprimir el subárbol derecho primero (más cerca de la parte superior)
+            imprimirArbol(raiz->get_right(), space);
+        
+            // Imprimir el valor del nodo actual con la cantidad de spaces necesarios
+            cout << endl;
+            cout << setw(space) << raiz->get_data() << endl;
+        
+            // Imprimir el subárbol izquierdo
+            imprimirArbol(raiz->get_left(), space);
+        }
+        
+        // Atributos
+        unsigned int size_;
+        Node *root_;
+    
+        public:
         BST(){
             size_ = 0;
             root_ = nullptr;
@@ -78,15 +104,15 @@ class BST{
                 size_++;
                 return;
             }
-            Node *tempNode = root_, *parent = nullptr;
+            Node *curr = root_, *parent = nullptr;
 
-            while (tempNode != nullptr) {
-                assert(elem != tempNode->get_data());
-                parent = tempNode;
-                if (elem < tempNode->get_data()) {
-                    tempNode = tempNode->get_left();
+            while (curr != nullptr) {
+                assert(elem != curr->get_data());
+                parent = curr;
+                if (elem < curr->get_data()) {
+                    curr = curr->get_left();
                 } else {
-                    tempNode = tempNode->get_right();
+                    curr = curr->get_right();
                 }
             }
         
@@ -102,24 +128,85 @@ class BST{
             if(empty()){
                 return 0;
             } else if(size() == 1 && elem == root_->get_data()){
-                return root_;
+                root_->printNode();
+                return 1;
             }
 
-            Node *tempNode = root_, *parent = nullptr;
+            Node *curr = root_, *parent = nullptr;
 
-            while (tempNode != nullptr) {
-                parent = tempNode;
-                if(elem == tempNode->get_data()){
-                    tempNode->print();
+            while (curr != nullptr) {
+                parent = curr;
+                if(elem == curr->get_data()){
+                    curr->printNode();
                     return 1;
-                } else if (elem < tempNode->get_data()) {
-                    tempNode = tempNode->get_left();
+                } else if (elem < curr->get_data()) {
+                    curr = curr->get_left();
                 } else {
-                    tempNode = tempNode->get_right();
+                    curr = curr->get_right();
                 }
             }
             return 0;
 
+        }
+
+        void remove(Type const elem, Node* curr = nullptr, Node* parent = nullptr){
+            assert(!empty());
+
+            if(curr == nullptr){
+                curr = root_;
+            }
+
+            if(elem < curr->get_data()){
+                remove(elem, curr->get_left(), curr);
+            } else if(elem > curr->get_data()){
+                remove(elem, curr->get_right(), curr);
+            } else {
+                if(curr->leaf()){
+                    if (parent == nullptr) {
+                        delete root_;
+                        root_ = nullptr;
+                        size_--;
+                    } else if (parent->get_left() == curr) {
+                        parent->change_left(nullptr);
+                        delete curr;
+                        size_--;
+                    } else {
+                        parent->change_right(nullptr);
+                        delete curr;
+                        size_--;
+                    }
+
+                } else if (curr->get_left() == nullptr || curr->get_right() == nullptr) {
+                    Node* child = (curr->get_left() != nullptr) ? curr->get_left() : curr->get_right();
+        
+                    if (parent == nullptr) {
+                        delete root_;
+                        root_ = child;
+                        size_--;
+                    } else if (parent->get_left() == curr) {
+                        parent->change_left(child);
+                        delete curr;
+                        size_--;
+                    } else {
+                        parent->change_right(child);
+                        delete curr;
+                        size_--;
+                    }
+
+                } else {
+                    Node* newNode = curr->get_right();
+                    Node* newNodeParent = curr;
+
+                    while(newNode->get_left() != nullptr){
+                        newNodeParent = newNode;
+                        newNode = newNode->get_left();
+                    }
+
+                    curr->change_data(newNode->get_data());
+
+                    remove(newNode->get_data(), curr->get_right(), curr);
+                }
+            }
         }
 
         bool empty() const {
@@ -133,6 +220,10 @@ class BST{
         int level(){
             return 1 + levelAux(root_);
         }
+
+        void print(){
+            imprimirArbol(root_);
+        }
 };
 
 int main(){
@@ -144,9 +235,15 @@ int main(){
     arbol.push(4);
     arbol.push(6);
 
+    arbol.print();
     cout << arbol.size() << endl;
+    cout << arbol.level() << endl;
+    arbol.remove(5);
+    arbol.print();
+    cout << arbol.size() << endl;
+    cout << arbol.level() << endl;
+
     cout << arbol.find(4) << endl;
     cout << arbol.find(5) << endl;
     cout << arbol.find(6) << endl;
-    cout << arbol.level() << endl;
 }
