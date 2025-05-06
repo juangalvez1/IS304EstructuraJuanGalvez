@@ -22,7 +22,7 @@ class HeapMax{
         }
 
         void heapifyUp(){
-            int i = storage_.size() - 1;
+            unsigned int i = storage_.size() - 1;
 
             while(i > 0 && storage_[parent(i)] < storage_[i]){
                 swap(storage_[parent(i)], storage_[i]);
@@ -31,10 +31,10 @@ class HeapMax{
         }
 
         void heapifyDown(){
-            int i = 0, size = storage_.size(), left = leftChild(i), right = rightChild(i);
+            unsigned int i = 0, size = storage_.size(), left = leftChild(i), right = rightChild(i);
 
             while((left < size && storage_[i] < storage_[left]) || (right < size && storage_[i] < storage_[right])){
-                int largest = i;
+                unsigned int largest = i;
 
                 if(left < size && storage_[i] < storage_[left]){
                     largest = left;
@@ -81,7 +81,7 @@ class HeapMax{
             return storage_.size();
         }
 
-        bool empty(){
+        bool empty() const {
             return storage_.empty();
         }
 
