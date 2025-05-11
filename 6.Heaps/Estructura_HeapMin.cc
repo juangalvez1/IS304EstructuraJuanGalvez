@@ -1,13 +1,18 @@
 #include <iostream>
 #include <cassert>
 #include <vector>
+#include <random>
 
 using namespace std;
+
+random_device rd;
+mt19937 gen(rd());
+uniform_int_distribution<int> dist(1, 100);
 
 template<typename Type>
 class HeapMin{
     private:
-        vector<Type> storage_;
+        vector<pair<unsigned int, Type>> storage_;
 
         unsigned int parent(const unsigned int i) const {
             return (i - 1) / 2;
@@ -54,27 +59,28 @@ class HeapMin{
         }
 
     public:
-        HeapMin(): storage_(vector<Type> ()) {}
+        HeapMin(): storage_(vector<pair<unsigned int, Type>> ()) {}
 
         void insert(const Type& elem){
-            storage_.push_back(elem);
+            pair<unsigned int, Type> newNode = make_pair(dist(gen), elem);
+            storage_.push_back(newNode);
             heapifyUp();
         }
 
         Type pop(){
             assert(!empty());
 
-            Type minElem = storage_.front();
+            pair<unsigned int, Type> minElem = storage_.front();
             storage_.front() = storage_.back();
             storage_.pop_back();
 
             heapifyDown();
 
-            return minElem;
+            return minElem.second;
         }
 
         Type top() const {
-            return storage_.front();
+            return storage_.front().second;
         }
 
         int size() const {
@@ -89,6 +95,19 @@ class HeapMin{
 
 int main(){
     cout << "HeapMin" << endl;
+    vector<int> a = {15, 10, 20, 17, 8, 25, 30};
+    HeapMin<int> H;
+
+    for(int i : a){
+        //cout << i << endl;
+        H.insert(i);
+    }
+
+    int size = H.size() - 1;
+    for(int i = 0; i < size; i++){
+        cout << H.pop() << endl;
+    }
+
 
     return 0;
 }
