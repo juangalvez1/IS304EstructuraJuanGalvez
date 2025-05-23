@@ -138,6 +138,96 @@ class RBT{
             root_->color() = BLACK;
         }
 
+        void fixDelete(Node* x) {
+            while (x != root_ && (x == nullptr || x->color() == BLACK)) {
+                if (x == x->parent()->left()) {
+                    Node* w = x->parent()->right();
+        
+                    // Caso 1: El hermano es rojo
+                    if (w != nullptr && w->color() == RED) {
+                        w->color() = BLACK;
+                        x->parent()->color() = RED;
+                        rotateLeft(x->parent());
+                        w = x->parent()->right();
+                    }
+        
+                    // Caso 2: Hermano y ambos hijos negros
+                    if ((w->left() == nullptr || w->left()->color() == BLACK) &&
+                        (w->right() == nullptr || w->right()->color() == BLACK)) {
+                        w->color() = RED;
+                        x = x->parent();
+                    } else {
+                        // Caso 3: Hermano negro con hijo izquierdo rojo y derecho negro
+                        if (w->right() == nullptr || w->right()->color() == BLACK) {
+                            if (w->left() != nullptr)
+                                w->left()->color() = BLACK;
+                            w->color() = RED;
+                            rotateRight(w);
+                            w = x->parent()->right();
+                        }
+        
+                        // Caso 4: Hermano negro con hijo derecho rojo
+                        w->color() = x->parent()->color();
+                        x->parent()->color() = BLACK;
+                        if (w->right() != nullptr)
+                            w->right()->color() = BLACK;
+                        rotateLeft(x->parent());
+                        x = root_;
+                    }
+                } else {
+                    // Versión espejo
+                    Node* w = x->parent()->left();
+        
+                    if (w != nullptr && w->color() == RED) {
+                        w->color() = BLACK;
+                        x->parent()->color() = RED;
+                        rotateRight(x->parent());
+                        w = x->parent()->left();
+                    }
+        
+                    if ((w->left() == nullptr || w->left()->color() == BLACK) &&
+                        (w->right() == nullptr || w->right()->color() == BLACK)) {
+                        w->color() = RED;
+                        x = x->parent();
+                    } else {
+                        if (w->left() == nullptr || w->left()->color() == BLACK) {
+                            if (w->right() != nullptr)
+                                w->right()->color() = BLACK;
+                            w->color() = RED;
+                            rotateLeft(w);
+                            w = x->parent()->left();
+                        }
+        
+                        w->color() = x->parent()->color();
+                        x->parent()->color() = BLACK;
+                        if (w->left() != nullptr)
+                            w->left()->color() = BLACK;
+                        rotateRight(x->parent());
+                        x = root_;
+                    }
+                }
+            }
+        
+            if (x != nullptr)
+                x->color() = BLACK;
+        }
+        
+
+        void transplant(Node *u, Node *v){
+            if(u->parent() == nullptr){
+                root_ = v;
+            } else if(u == u->parent()->left()){
+                u->parent()->left() = v;
+            } else {
+                u->parent()->right() = v;
+            }
+        
+            if(v != nullptr){
+                v->parent() = u->parent();
+            }
+        }
+        
+
     public:
         RBT() : root_(nullptr), size_(0) {}
 
@@ -154,7 +244,7 @@ class RBT{
             Node* parent = nullptr;
 
             while (curr != nullptr) {
-                assert(elem != curr->get_data());
+                assert(elem != curr->data());
                 parent = curr;
                 if(elem < curr->data()){
                     curr = curr->left();
@@ -178,6 +268,67 @@ class RBT{
             }
         }
 
+        void remove(const Type& elem) {
+            if (empty()) return;
+        
+            Node* z = root_;
+        
+            // Buscar el nodo z con el valor a eliminar
+            while (z != nullptr && z->data() != elem) {
+                if (elem < z->data()) {
+                    z = z->left();
+                } else {
+                    z = z->right();
+                }
+            }
+
+            if (z == nullptr){
+                return;
+            }
+
+            Node* y = z; 
+            bool originalColor = y->color();
+            Node* x = nullptr;
+        
+            if (z->left() == nullptr) {
+                x = z->right();
+                transplant(z, x);
+            } else if (z->right() == nullptr) {
+                x = z->left();
+                transplant(z, x);
+            } else {
+                y = z->right();
+                while (y->left() != nullptr) {
+                    y = y->left();
+                }
+        
+                originalColor = y->color();
+                x = y->right();
+        
+                if (y->parent() == z) {
+                    if (x != nullptr)
+                        x->parent() = y;
+                } else {
+                    transplant(y, x);
+                    y->right() = z->right();
+                    y->right()->parent() = y;
+                }
+        
+                transplant(z, y);
+                y->left() = z->left();
+                y->left()->parent() = y;
+                y->color() = z->color();
+            }
+        
+            size_--;
+        
+            if(originalColor == BLACK){
+                fixDelete(x);
+            }
+        
+            delete z; // Liberamos la memoria del nodo original
+        }
+
         bool find(Type& elem) const {
             Node* curr = root_;
 
@@ -196,6 +347,10 @@ class RBT{
 
         unsigned int size() const {
             return size_;
+        }
+
+        bool empty() const {
+            return !size();
         }
 };
 

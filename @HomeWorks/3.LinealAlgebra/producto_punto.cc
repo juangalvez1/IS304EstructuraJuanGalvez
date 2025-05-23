@@ -41,7 +41,7 @@ int main(){
 
     int dotProduct = DotProduct();
 
-    cout << "El resultado del producto punto es :" << dotProduct << endl;
+    cout << "El resultado del producto punto es : " << dotProduct << endl;
 
     return 0;
 }
